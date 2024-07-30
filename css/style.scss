@@ -1,0 +1,440 @@
+@use "sass:math";
+
+@function round($x, $digits)
+{
+	$p : math.pow(10, $digits);
+	@return math.div(math.round($x * $p), $p);
+}
+
+@function toRem($x, $base: 16)
+{
+	@return math.div($x, $base) * 1rem;
+}
+
+@function clampify($min_size, $max_size, $min_vp: 375, $max_vp: 1440, $digits: 4)
+{
+	$var_part   : math.div($max_size - $min_size, $max_vp - $min_vp);
+	$const_part : round( math.div($max_size - $max_vp * $var_part, 16), $digits );
+	$operator   : "\+";
+
+	@if $const_part == 0
+	{
+		$const_part : "";
+	}
+	$min_size : round( toRem($min_size), $digits );
+	$max_size : round( toRem($max_size), $digits );
+
+	@return "clamp(#{$min_size}, #{$const_part}rem \+ #{round($var_part * 100, $digits)}vw, #{$max_size})"
+}
+
+// -----------------------------------------------------------------------------
+
+:root
+{
+	--burnt-sienna             : hsl(12, 94%, 65%);
+	--earth-yellow             : hsl(33, 100%, 70%);
+	--raisin-black             : hsl(244, 23%, 12%);
+	--seasalt                  : hsl(20, 33%, 98%);
+	--tiffany-blue             : hsl(177, 68%, 64%);
+	box-sizing                 : border-box;
+}
+
+html,
+body
+{
+	scroll-behavior            : smooth;
+}
+
+*
+{
+	margin                     : 0;
+	padding                    : 0;
+	border                     : 0;
+	outline                    : 0;
+	box-sizing                 : inherit;
+}
+
+::selection
+{
+	color                      : var(--raisin-black);
+	background-color           : var(--tiffany-blue);
+}
+
+body
+{
+	font-family                : "IBM Plex Sans", sans-serif;
+	font-size                  : toRem(16);
+	line-height                : 1.625;
+	min-height                 : 100vh;
+	min-height                 : 100svh;
+	color                      : var(--raisin-black);
+	background-color           : var(--seasalt);
+	background-image           : url(../img/bg-main-mobile.png);
+	background-size            : cover;
+}
+
+@media only screen and (min-width: toRem(768))
+{
+	body
+	{
+		background-image       : url(../img/bg-pattern-1.svg), url(../img/bg-main-tablet.png);
+		background-size        : 21.667%, cover;
+		background-position    : top toRem(-32) right 0px, 0px 0px;
+		background-repeat      : no-repeat, no-repeat;
+	}
+}
+
+@media only screen and (min-width: toRem(1440))
+{
+	body
+	{
+		background-image       : url(../img/bg-pattern-1.svg), url(../img/bg-main-desktop.png);
+		background-position    : top toRem(-40) right 0px, 0px 0px;
+	}
+}
+
+a
+{
+	text-decoration            : unset;
+	color                      : inherit;
+}
+
+h1,
+h2
+{
+	text-wrap                  : balance;
+}
+
+h1
+{
+	font-size                  : #{clampify(40, 88)};
+	line-height                : #{clampify(48, 88)};
+	letter-spacing             : toRem(-1);
+}
+
+h2
+{
+	font-size                  : #{clampify(32, 40)};
+	line-height                : #{clampify(40, 52)};
+}
+
+header,
+footer
+{
+	padding-inline             : #{clampify(24, 165)};
+}
+
+header
+{
+	padding-block-start        : #{clampify(40, 62)};
+
+	> h1
+	{
+		margin-block-start     : #{clampify(64, 127)};
+	}
+
+	> p
+	{
+		margin-block-start     : #{clampify(20, 40)};
+		max-inline-size        : 70ch;
+	}
+}
+
+@media only screen and (min-width: toRem(768))
+{
+	main
+	{
+		margin-inline          : #{clampify(33, 165)};
+	}
+}
+
+main,
+article,
+.button
+{
+	border-radius              : toRem(12);
+}
+
+img,
+picture
+{
+	display                    : inline-block;
+	font-size                  : 0;
+}
+
+img
+{
+	max-block-size             : #{clampify(430, 642)};
+}
+
+main
+{
+	position                   : relative;
+	margin-block-start         : #{clampify(166, 321)};
+	padding-block-start        : toRem(380);
+	background-color           : var(--raisin-black);
+	background-image           : url(../img/bg-pattern-2.svg);
+	background-repeat          : no-repeat;
+	background-size            : #{clampify(280, 312)} #{clampify(420, 468)};
+	background-position        : top center;
+
+	> picture
+	{
+		position               : absolute;
+		inset-inline-start     : 50%;
+		inset-block-start      : toRem(-98);
+		transform              : translateX(-50%);
+		pointer-events         : none;
+		user-select            : none;
+	}
+
+	> article
+	{
+		padding-inline         : #{clampify(42, 54)};
+		padding-block-start    : #{clampify(48, 58)};
+		padding-block-end      : toRem(48);
+		color                  : var(--seasalt);
+		background-color       : var(--burnt-sienna);
+	}
+
+	> article > p:nth-of-type(1)
+	{
+		margin-block-start     : toRem(22);
+	}
+
+	> article > p:nth-of-type(2)
+	{
+		margin-block-start     : toRem(39);
+		margin-block-end       : toRem(46);
+	}
+
+	> article > p > span
+	{
+		font-size              : toRem(65);
+		line-height            : 0.8;
+		font-weight            : 700;
+		vertical-align         : middle;
+		display                : inline-block;
+		margin-inline-end      : toRem(16);
+	}
+}
+
+@media only screen and (min-width: toRem(768))
+{
+	main
+	{
+		min-block-size         : toRem(600);
+		padding-block-start    : 0;
+		background-position    : #{clampify(229, 336)} -31%;
+
+		> picture
+		{
+			inline-size        : #{clampify(270, 280, 768, 1440)};
+			inset-inline-start : #{clampify(64, 102, 768, 1440)};
+			inset-block-start  : unset;
+			inset-block-end    : toRem(182);
+			transform          : unset;
+		}
+
+		> article
+		{
+			position           : absolute;
+			inset-inline-end   : #{clampify(58, 95, 768, 1440)};
+			inset-block-start  : toRem(90);
+			max-inline-size    : toRem(446);
+		}
+	}
+}
+
+@media only screen and (min-width: toRem(1440))
+{
+	main > picture
+	{
+		inset-block-end        : toRem(171);
+	}
+}
+
+ul
+{
+	display                    : flex;
+	gap                        : toRem(20);
+	list-style                 : none;
+}
+
+footer,
+footer > div
+{
+	display                    : flex;
+	flex-wrap                  : wrap;
+}
+
+footer
+{
+	margin-block-start         : #{clampify(64, 202)};
+	margin-block-end           : #{clampify(80, 91)};
+	justify-content            : space-between;
+	align-items                : center;;
+	row-gap                    : toRem(64);
+
+	> div
+	{
+		column-gap             : toRem(138);
+		row-gap                : toRem(32);
+	}
+
+	.icon:hover
+	{
+		filter                 : invert(47%) sepia(99%) saturate(464%) hue-rotate(322deg) brightness(105%) contrast(96%);
+	}
+}
+
+.bold,
+.button
+{
+	font-weight                : 700;
+}
+
+.button,
+.icon
+{
+	transition                 : all 100ms ease-out;
+}
+
+.button
+{
+	display                    : block;
+	text-align                 : center;
+	block-size                 : toRem(61);
+	max-inline-size            : toRem(333);
+	align-content              : center;
+	text-decoration            : none;
+	user-select                : none;
+
+	+ .button
+	{
+		margin-block-start     : toRem(16);
+	}
+
+	&.apple::before,
+	&.android::before
+	{
+		content                : "";
+		display                : inline-block;
+		vertical-align         : text-top;
+		block-size             : toRem(20);
+		inline-size            : toRem(17);
+		margin-inline-end      : toRem(8);
+	}
+
+	&.apple
+	{
+		color                  : var(--seasalt);
+		background-color       : var(--raisin-black);
+	}
+
+	&.apple:hover
+	{
+		background-color       : var(--tiffany-blue);
+	}
+
+	&.apple::before
+	{
+		background-image       : url(../img/icon-apple.svg);
+	}
+
+	&.android
+	{
+		color                  : var(--raisin-black);
+		background-color       : var(--seasalt);
+	}
+
+	&.android:hover
+	{
+		background-color       : var(--earth-yellow);
+	}
+
+	&.android::before
+	{
+		background-image       : url(../img/icon-android.svg);
+	}
+}
+
+.body-1
+{
+	font-size                  : #{clampify(16, 20)};
+	line-height                : #{clampify(26, 34)};
+}
+
+*:has(> .hidden-text)
+{
+	position                   : relative;
+}
+
+.hidden-text
+{
+	position                   : absolute;
+	font-size                  : 0;
+	opacity                    : 0;
+}
+
+.icon,
+.logo
+{
+	display                    : block;
+}
+
+.icon
+{
+	background-size            : cover;
+	width                      : toRem(20);
+	height                     : toRem(20);
+
+	&.facebook
+	{
+		background-image       : url(../img/icon-facebook.svg);
+	}
+
+	&.instagram
+	{
+		background-image       : url(../img/icon-instagram.svg);
+	}
+
+	&.twitter
+	{
+		width                  : toRem(23);
+		background-image       : url(../img/icon-twitter.svg);
+	}
+}
+
+.logo
+{
+	width                      : toRem(147);
+	height                     : toRem(33);
+	background-image           : url(../img/logo.svg);
+
+	> span
+	{
+		font-size              : toRem(33);
+		line-height            : 0.697;
+		font-style             : normal;
+		font-weight            : 700;
+		color                  : transparent;
+	}
+
+	&::before,
+	&::after
+	{
+		content                : "";
+		display                : table;
+	}
+
+	&::before
+	{
+		margin-bottom: -0.026em;
+	}
+
+	&::after
+	{
+		margin-top: 0.026em;
+	}
+}
