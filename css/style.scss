@@ -302,6 +302,9 @@ footer
 
 .button
 {
+	font-size                  : toRem(18);
+	line-height                : 2;
+	letter-spacing             : toRem(-0.18);
 	display                    : block;
 	text-align                 : center;
 	block-size                 : toRem(61);

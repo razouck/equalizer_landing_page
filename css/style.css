@@ -213,6 +213,9 @@ footer .icon:hover {
 }
 
 .button {
+  font-size: 1.125rem;
+  line-height: 2;
+  letter-spacing: -0.01125rem;
   display: block;
   text-align: center;
   block-size: 3.8125rem;
