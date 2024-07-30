@@ -43,6 +43,6 @@ Users should be able to:
 
 ## Author
 
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/razouck)
+- Frontend Mentor - [@razouck](https://www.frontendmentor.io/profile/razouck)
 - GitHub - [@razouck](https://github.com/razouck)
 - Twitter - [@razouck](https://www.twitter.com/razouck)
